@@ -7,9 +7,9 @@ import { useColorsContext } from "../../context/colors";
 export const BitfireCanvas = () => {
   const colorsContext = useColorsContext();
   const [run, setRun] = useState(false);
-  const [canvas, setCanvas] = useState(false);
-  const containerRef = useRef<HTMLElement>(null);
-  const canvasRef = useRef<HTMLElement>(null);
+  const [canvas, setCanvas] = useState<Canvas | boolean>(false);
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
     setCanvas(
@@ -23,12 +23,13 @@ export const BitfireCanvas = () => {
     );
 
     return () => {
-      canvas.destroy();
+      console.warn("destroy canvas if you ever see this");
+      // canvas.destroy();
     };
   }, []);
 
   useEffect(() => {
-    if (canvas) {
+    if (canvas instanceof Canvas) {
       const options = { colors: colorsContext.state.colors };
       const entity = run ? new Matrix(options) : new EditMatrix(options);
       canvas.removeEntity(0);

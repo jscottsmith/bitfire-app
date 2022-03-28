@@ -1,7 +1,25 @@
-import { createContext, useReducer, useContext } from "react";
+import {
+  createContext,
+  useReducer,
+  useContext,
+  Dispatch,
+  PropsWithChildren,
+} from "react";
 import { INITIAL_COLORS } from "../constants";
 
-const ColorsContext = createContext(INITIAL_COLORS);
+type ColorContextValue = {
+  state: ColorState;
+  dispatch: Dispatch<any>;
+};
+
+const initialState = {
+  colors: INITIAL_COLORS,
+};
+
+const ColorsContext = createContext<ColorContextValue>({
+  state: initialState,
+  dispatch: () => {},
+});
 
 export enum ColorActions {
   "reset" = "reset",
@@ -9,10 +27,6 @@ export enum ColorActions {
 }
 
 type Action = { type: keyof typeof ColorActions; payload: any };
-
-const initialState = {
-  colors: INITIAL_COLORS,
-};
 
 export function resetColors() {
   return { type: ColorActions.reset };
@@ -50,10 +64,11 @@ export function useColorsContext() {
   return useContext(ColorsContext);
 }
 
-export const ColorsProvider = (props) => {
+export const ColorsProvider = (props: PropsWithChildren<{}>) => {
   const [state, dispatch] = useReducer(colorsReducer, initialState);
+  const value: ColorContextValue = { state, dispatch };
   return (
-    <ColorsContext.Provider value={{ state, dispatch }}>
+    <ColorsContext.Provider value={value}>
       {props.children}
     </ColorsContext.Provider>
   );
