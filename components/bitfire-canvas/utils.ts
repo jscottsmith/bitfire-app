@@ -1,8 +1,14 @@
-export function createGradientArray(size, colorStops) {
+type ColorStops = [number, string];
+
+export function createGradientArray(size: number, colorStops: ColorStops[]) {
   const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
+  const ctx: CanvasRenderingContext2D | null = canvas.getContext("2d");
   canvas.width = size;
   canvas.height = 1;
+
+  if (!ctx) {
+    throw new Error("issue creating canvas");
+  }
 
   const gradient = ctx.createLinearGradient(0, 0, size, 0);
   colorStops.forEach((args) => gradient.addColorStop(...args));
@@ -18,7 +24,7 @@ export function createGradientArray(size, colorStops) {
     });
 }
 
-export function createFlameGraph(colors: string[]) {
+export function createFlameGraph(colors: string[]): ColorStops[] {
   const graph = [0, 0.1, 0.3, 0.5, 0.6, 0.8, 1];
   if (graph.length !== colors.length) {
     throw new Error("colors and graph const must match");

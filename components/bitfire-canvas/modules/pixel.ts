@@ -2,43 +2,65 @@ import { utils } from "@gush/candybar";
 import { CELL_HEIGHT, CELL_WIDTH, SPREAD_FROM } from "../constants";
 
 export class Pixel {
-  constructor(x, y, arr, idx) {
-    this.x = x;
-    this.y = y;
-    this.idx = idx;
-    this.arr = arr;
+  index: number;
+  x: number;
+  y: number;
+  colors: string[];
+  isStatic: boolean;
+
+  top?: Pixel;
+  left?: Pixel;
+  bottom?: Pixel;
+  right?: Pixel;
+
+  constructor(options: {
+    x: number;
+    y: number;
+    index: number;
+    colors: string[];
+    isStatic: boolean;
+  }) {
+    this.x = options.x;
+    this.y = options.y;
+    this.index = options.index;
+    this.colors = options.colors;
+    this.isStatic = options.isStatic;
   }
 
-  setSides({ top, left, bottom, right }) {
+  setSides({ top, left, bottom, right }: any) {
     this.top = top;
     this.left = left;
     this.bottom = bottom;
     this.right = right;
   }
 
-  draw = ({ ctx }) => {
-    const fill = this.arr[this.idx];
+  draw = ({ ctx }: any) => {
+    const fill = this.colors[this.index];
     ctx.fillStyle = fill;
     ctx.fillRect(this.x, this.y, CELL_WIDTH, CELL_HEIGHT);
   };
 
   update = () => {
+    if (this.isStatic) {
+      return;
+    }
+
     const side = SPREAD_FROM[utils.getRandomInt(0, SPREAD_FROM.length - 1)];
     const dest = this[side];
 
     // check if it can dest to designated side
-    if (dest && dest.idx < this.idx) {
+    if (dest && dest.index < this.index) {
       const rand = utils.getRandomInt(-1, 4);
-      this.idx = dest.idx + rand;
+      this.index = dest.index + rand;
     } else {
-      this.idx += 1;
+      this.index += 1;
     }
 
     // resets if overflow
-    if (this.idx > this.arr.length - 1) {
-      this.idx = this.arr.length - 1;
-    } else if (this.idx < 0) {
-      this.idx = 0;
+    if (this.index > this.colors.length - 1) {
+      this.index = this.colors.length - 1;
+    } else if (this.index < 0) {
+      this.index = 0;
     }
   };
 }

@@ -1,19 +1,24 @@
 import { CELL_HEIGHT, CELL_WIDTH, FLAME_DEPTH } from "../constants";
 import { Table } from "../types";
 import { createFlameGraph, createGradientArray } from "../utils";
-import { StaticPixel } from "./static-pixel";
+import { Pixel } from "./pixel";
 
 export class EditMatrix {
   rows: number;
   columns: number;
   pixels: Table;
   colors: string[];
+  mousedown: boolean;
 
   constructor(options: { colors: string[] }) {
+    this.mousedown = false;
+    this.rows = 0;
+    this.columns = 0;
+    this.pixels = [];
     this.colors = options.colors;
   }
 
-  createMatrix(bounds) {
+  createMatrix(bounds: any) {
     const colors = createGradientArray(
       FLAME_DEPTH,
       createFlameGraph(this.colors)
@@ -25,12 +30,13 @@ export class EditMatrix {
 
     this.pixels = table.map((row, y) =>
       row.map(
-        (col, x) =>
-          new StaticPixel({
+        (_: any, x: number) =>
+          new Pixel({
             x: x * CELL_WIDTH,
             y: y * CELL_HEIGHT,
             colors,
             index: y >= this.rows - 2 ? 0 : colors.length - 1,
+            isStatic: true,
           })
       )
     );
@@ -49,13 +55,13 @@ export class EditMatrix {
     }
   }
 
-  setup = ({ bounds, canvas }) => {
+  setup = ({ bounds, canvas }: any) => {
     this.createMatrix(bounds);
     canvas.addEventListener("mousedown", this.handleMouseDown);
     canvas.addEventListener("mouseup", this.handleMouseUp);
   };
 
-  resize = ({ bounds }) => this.createMatrix(bounds);
+  resize = ({ bounds }: any) => this.createMatrix(bounds);
 
   handleMouseDown = () => {
     this.mousedown = true;
@@ -65,7 +71,7 @@ export class EditMatrix {
     this.mousedown = false;
   };
 
-  draw = ({ ctx, pointer, tick, bounds }) => {
+  draw = ({ ctx, pointer, tick, bounds }: any) => {
     const { x, y } = pointer.position;
 
     // pointer

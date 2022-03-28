@@ -3,6 +3,13 @@ import { Table } from "../types";
 import { createFlameGraph, createGradientArray } from "../utils";
 import { Pixel } from "./pixel";
 
+export type PixelBounds = {
+  top: Pixel;
+  bottom: Pixel;
+  left: Pixel;
+  right: Pixel;
+};
+
 export class Matrix {
   rows: number;
   columns: number;
@@ -10,10 +17,13 @@ export class Matrix {
   colors: string[];
 
   constructor(options: { colors: string[] }) {
+    this.rows = 0;
+    this.columns = 0;
+    this.pixels = [];
     this.colors = options.colors;
   }
 
-  createMatrix(bounds) {
+  createMatrix(bounds: any) {
     const colors = createGradientArray(
       FLAME_DEPTH,
       createFlameGraph(this.colors)
@@ -25,19 +35,20 @@ export class Matrix {
 
     this.pixels = table.map((row, y) =>
       row.map(
-        (col, x) =>
-          new Pixel(
-            x * CELL_WIDTH,
-            y * CELL_HEIGHT,
+        (_: any, x: number) =>
+          new Pixel({
+            x: x * CELL_WIDTH,
+            y: y * CELL_HEIGHT,
             colors,
-            y >= this.rows - 2 ? 0 : colors.length - 1
-          )
+            index: y >= this.rows - 2 ? 0 : colors.length - 1,
+            isStatic: false,
+          })
       )
     );
 
     for (let row = 0; row < this.rows; row++) {
       for (let col = 0; col < this.columns; col++) {
-        const bounds = {
+        const bounds: PixelBounds = {
           top: this.pixels[row - 1] && this.pixels[row - 1][col],
           left: this.pixels[row][col - 1],
           bottom: this.pixels[row + 1] && this.pixels[row + 1][col],
@@ -49,11 +60,11 @@ export class Matrix {
     }
   }
 
-  setup = ({ bounds }) => this.createMatrix(bounds);
+  setup = ({ bounds }: any) => this.createMatrix(bounds);
 
-  resize = ({ bounds }) => this.createMatrix(bounds);
+  resize = ({ bounds }: any) => this.createMatrix(bounds);
 
-  draw = ({ ctx, pointer, tick, bounds }) => {
+  draw = ({ ctx, pointer, tick, bounds }: any) => {
     const { x, y } = pointer.position;
     let pointCol;
     let pointRow;
@@ -74,7 +85,7 @@ export class Matrix {
       for (let col = 0; col < this.columns; col++) {
         const pixel = this.pixels[row][col];
         if (pointRow === row && pointCol === col) {
-          pixel.idx = 0;
+          pixel.index = 0;
         }
 
         pixel.draw({ ctx });
