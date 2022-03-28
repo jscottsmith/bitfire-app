@@ -1,13 +1,13 @@
 import React, { useRef, useEffect, useState } from "react";
 import { Canvas } from "@gush/candybar";
 import { EditMatrix } from "./modules/edit-matrix";
-import { Matrix } from "./modules/matrix";
 import { useColorsContext } from "../../context/colors";
 
 export const BitfireCanvas = () => {
   const colorsContext = useColorsContext();
   const [run, setRun] = useState(false);
   const [canvas, setCanvas] = useState<Canvas | boolean>(false);
+  const [matrix, setMatrix] = useState<EditMatrix | boolean>(false);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -29,22 +29,39 @@ export const BitfireCanvas = () => {
   }, []);
 
   useEffect(() => {
+    const options = { colors: colorsContext.state.colors, isRunning: run };
+    const entity = new EditMatrix(options);
+    setMatrix(entity);
+
     if (canvas instanceof Canvas) {
-      const options = { colors: colorsContext.state.colors };
-      const entity = run ? new Matrix(options) : new EditMatrix(options);
-      canvas.removeEntity(0);
       canvas.addEntity(entity);
     }
-  }, [run, canvas, colorsContext.state.colors]);
+  }, [canvas]);
+
+  useEffect(() => {
+    if (matrix instanceof EditMatrix) {
+      if (run) {
+        matrix.setRunMode();
+      } else {
+        matrix.setEditMode();
+      }
+    }
+  }, [run, canvas, matrix]);
 
   return (
     <>
       <div ref={containerRef} className="w-[512px] h-[512px] relative">
         <canvas ref={canvasRef} />
       </div>
-      <button onClick={() => setRun(!run)}>
-        run {run ? "running" : "editing"}
-      </button>
+      <div>
+        Mode:{" "}
+        <button
+          className="bg-black text-white p-2"
+          onClick={() => setRun(!run)}
+        >
+          {run ? "running" : "editing"}
+        </button>
+      </div>
     </>
   );
 };

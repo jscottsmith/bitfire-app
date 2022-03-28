@@ -9,9 +9,11 @@ export class EditMatrix {
   pixels: Table;
   colors: string[];
   mousedown: boolean;
+  isRunning: boolean;
 
-  constructor(options: { colors: string[] }) {
+  constructor(options: { colors: string[]; isRunning: boolean }) {
     this.mousedown = false;
+    this.isRunning = options.isRunning;
     this.rows = 0;
     this.columns = 0;
     this.pixels = [];
@@ -71,6 +73,24 @@ export class EditMatrix {
     this.mousedown = false;
   };
 
+  setRunMode() {
+    this.isRunning = true;
+    this.pixels.map((row) =>
+      row.map((pixel) => {
+        pixel.isStatic = false;
+      })
+    );
+  }
+
+  setEditMode() {
+    this.isRunning = false;
+    this.pixels.map((row) =>
+      row.map((pixel) => {
+        pixel.isStatic = true;
+      })
+    );
+  }
+
   draw = ({ ctx, pointer, tick, bounds }: any) => {
     const { x, y } = pointer.position;
 
@@ -81,7 +101,14 @@ export class EditMatrix {
     for (let row = 0; row < this.rows; row++) {
       for (let col = 0; col < this.columns; col++) {
         const pixel = this.pixels[row][col];
-        if (pointRow === row && pointCol === col && this.mousedown) {
+
+        // Draw mode
+        if (
+          pointRow === row &&
+          pointCol === col &&
+          this.mousedown &&
+          !this.isRunning
+        ) {
           pixel.index = 0;
         }
 
