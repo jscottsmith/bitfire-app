@@ -11,7 +11,8 @@
   "dependencies": {
     "next": "12.1.1",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "@gush/candybar": "^0.0.0-alpha38"
   },
   "devDependencies": {
     "@types/node": "17.0.23",
