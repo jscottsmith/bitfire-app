@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, useState } from "react";
+import cx from "classnames";
 import { Canvas } from "@gush/candybar";
 import { EditMatrix } from "./modules/edit-matrix";
 import { useColorsContext } from "../../context/colors";
@@ -77,7 +78,13 @@ export const BitfireCanvas = () => {
 
   return (
     <>
-      <div ref={containerRef} className="w-[512px] h-[512px] relative">
+      <div
+        ref={containerRef}
+        className={cx(
+          "w-[512px] h-[512px] relative",
+          isRunning ? "cursor-wait" : "cursor-crosshair"
+        )}
+      >
         <canvas ref={canvasRef} />
       </div>
       <div>
