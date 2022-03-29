@@ -26,7 +26,8 @@ const ColorsContext = createContext<ColorContextValue>({
 
 export enum ColorActions {
   "reset" = "reset",
-  "update" = "update",
+  "update-color" = "update-color",
+  "update-colors" = "update-colors",
 }
 
 type Action = { type: keyof typeof ColorActions; payload: any };
@@ -36,14 +37,17 @@ export function resetColors() {
 }
 
 export function updateColor(payload: { color: string; index: number }) {
-  return { type: ColorActions.update, payload };
+  return { type: ColorActions["update-color"], payload };
+}
+export function updateColors(payload: ColorStop[]) {
+  return { type: ColorActions["update-colors"], payload };
 }
 
 function colorsReducer(state: ColorState, action: Action): ColorState {
   switch (action.type) {
-    case "reset":
+    case ColorActions["reset"]:
       return initialState;
-    case "update": {
+    case ColorActions["update-color"]: {
       const newColors = state.colorStops.map((x, i) => {
         if (i === action.payload.index) {
           return { ...x, hex: action.payload.color };
@@ -51,6 +55,13 @@ function colorsReducer(state: ColorState, action: Action): ColorState {
         return x;
       });
 
+      return {
+        ...state,
+        colorStops: newColors,
+      };
+    }
+    case ColorActions["update-colors"]: {
+      const newColors = action.payload;
       return {
         ...state,
         colorStops: newColors,

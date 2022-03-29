@@ -1,9 +1,9 @@
 import type { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
 import { BitfireCanvas } from "../components/bitfire-canvas";
 import { ColorOptions } from "../components/color-options";
 import { ColorStops } from "../components/color-stops";
+import { GradientPicker } from "../components/gradient-picker";
 
 const Home: NextPage = () => {
   return (
