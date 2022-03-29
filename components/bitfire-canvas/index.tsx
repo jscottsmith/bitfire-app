@@ -49,6 +49,9 @@ function useMatrix(args: { canvas: Canvas | null; isRunning: boolean }) {
       const entity = new EditMatrix(options);
       setMatrix(entity);
       args.canvas.addEntity(entity);
+    } else if (matrix) {
+      console.log(colorsContext.state.colors);
+      matrix.updateColors(colorsContext.state.colors);
     }
   }, [matrix, args.canvas, args.isRunning, colorsContext.state.colors]);
 

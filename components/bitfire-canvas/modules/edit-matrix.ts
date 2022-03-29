@@ -20,6 +20,18 @@ export class EditMatrix {
     this.colors = options.colors;
   }
 
+  updateColors(colors: string[]) {
+    const colorsGradient = createGradientArray(
+      FLAME_DEPTH,
+      createFlameGraph(colors)
+    );
+    this.pixels.map((row) =>
+      row.map((pixel) => {
+        pixel.colors = colorsGradient;
+      })
+    );
+  }
+
   createMatrix(bounds: any) {
     const colors = createGradientArray(
       FLAME_DEPTH,
