@@ -1,11 +1,12 @@
 import { utils } from "@gush/candybar";
 import { CELL_HEIGHT, CELL_WIDTH, SPREAD_FROM } from "../constants";
+import { GradientColorArray } from "../utils";
 
 export class Pixel {
   index: number;
   x: number;
   y: number;
-  colors: string[];
+  colors: GradientColorArray;
   isStatic: boolean;
 
   top?: Pixel;
@@ -17,7 +18,7 @@ export class Pixel {
     x: number;
     y: number;
     index: number;
-    colors: string[];
+    colors: GradientColorArray;
     isStatic: boolean;
   }) {
     this.x = options.x;

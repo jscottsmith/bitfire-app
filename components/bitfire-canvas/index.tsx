@@ -40,7 +40,7 @@ function useMatrix(args: { canvas: Canvas | null; isRunning: boolean }) {
 
   useEffect(() => {
     const options = {
-      colors: colorsContext.state.colors,
+      colorStops: colorsContext.state.colorStops,
       isRunning: args.isRunning,
     };
 
@@ -50,10 +50,9 @@ function useMatrix(args: { canvas: Canvas | null; isRunning: boolean }) {
       setMatrix(entity);
       args.canvas.addEntity(entity);
     } else if (matrix) {
-      console.log(colorsContext.state.colors);
-      matrix.updateColors(colorsContext.state.colors);
+      matrix.updateColors(colorsContext.state.colorStops);
     }
-  }, [matrix, args.canvas, args.isRunning, colorsContext.state.colors]);
+  }, [matrix, args.canvas, args.isRunning, colorsContext.state.colorStops]);
 
   return matrix;
 }

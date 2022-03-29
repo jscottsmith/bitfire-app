@@ -16,18 +16,18 @@ export const ColorOptions = () => {
     <>
       <ul className="flex">
         <button onClick={() => context.dispatch(resetColors())}>Reset</button>
-        {context.state.colors.map((color, i) => (
+        {context.state.colorStops.map((colorStop, i) => (
           <li key={i}>
             <button
               onClick={() => {
                 setColorIndex(i);
-                setColor(color);
+                setColor(colorStop.hex);
                 setPickerOpen(true);
               }}
-              className="block p-2 hover:border-2 hover:border-solid hover:border-black"
-              style={{ background: color }}
+              className="block p-2 text-xs hover:border-2 hover:border-solid hover:border-black"
+              style={{ background: colorStop.hex }}
             >
-              {color}
+              {colorStop.hex}
             </button>
           </li>
         ))}

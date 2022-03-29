@@ -3,6 +3,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { BitfireCanvas } from "../components/bitfire-canvas";
 import { ColorOptions } from "../components/color-options";
+import { ColorStops } from "../components/color-stops";
 
 const Home: NextPage = () => {
   return (
@@ -16,6 +17,7 @@ const Home: NextPage = () => {
       <main>
         <div className="w-full h-screen flex items-center justify-center">
           <div>
+            <ColorStops />
             <ColorOptions />
             <BitfireCanvas />
           </div>

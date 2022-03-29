@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@gush/candybar": "^0.0.0-alpha38",
+    "framer-motion": "^6.2.8",
     "next": "12.1.1",
     "react": "17.0.2",
     "react-colorful": "^5.5.1",

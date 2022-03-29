@@ -6,6 +6,9 @@ import {
   PropsWithChildren,
 } from "react";
 import { INITIAL_COLORS } from "../constants";
+import { ColorStop } from "../type";
+
+type ColorState = { colorStops: ColorStop[] };
 
 type ColorContextValue = {
   state: ColorState;
@@ -13,7 +16,7 @@ type ColorContextValue = {
 };
 
 const initialState = {
-  colors: INITIAL_COLORS,
+  colorStops: INITIAL_COLORS,
 };
 
 const ColorsContext = createContext<ColorContextValue>({
@@ -36,23 +39,21 @@ export function updateColor(payload: { color: string; index: number }) {
   return { type: ColorActions.update, payload };
 }
 
-type ColorState = { colors: string[] };
-
 function colorsReducer(state: ColorState, action: Action): ColorState {
   switch (action.type) {
     case "reset":
       return initialState;
     case "update": {
-      const newColors = state.colors.map((x, i) => {
+      const newColors = state.colorStops.map((x, i) => {
         if (i === action.payload.index) {
-          return action.payload.color;
+          return { ...x, hex: action.payload.color };
         }
         return x;
       });
 
       return {
         ...state,
-        colors: newColors,
+        colorStops: newColors,
       };
     }
     default:

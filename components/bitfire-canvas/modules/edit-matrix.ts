@@ -1,30 +1,28 @@
+import { ColorStop } from "../../../type";
 import { CELL_HEIGHT, CELL_WIDTH, FLAME_DEPTH } from "../constants";
-import { Table } from "../types";
-import { createFlameGraph, createGradientArray } from "../utils";
+import { PixelTable } from "../types";
+import { createGradientArray } from "../utils";
 import { Pixel } from "./pixel";
 
 export class EditMatrix {
   rows: number;
   columns: number;
-  pixels: Table;
-  colors: string[];
+  pixels: PixelTable;
+  colorStops: ColorStop[];
   mousedown: boolean;
   isRunning: boolean;
 
-  constructor(options: { colors: string[]; isRunning: boolean }) {
+  constructor(options: { colorStops: ColorStop[]; isRunning: boolean }) {
     this.mousedown = false;
     this.isRunning = options.isRunning;
     this.rows = 0;
     this.columns = 0;
     this.pixels = [];
-    this.colors = options.colors;
+    this.colorStops = options.colorStops;
   }
 
-  updateColors(colors: string[]) {
-    const colorsGradient = createGradientArray(
-      FLAME_DEPTH,
-      createFlameGraph(colors)
-    );
+  updateColors(colorStops: ColorStop[]) {
+    const colorsGradient = createGradientArray(FLAME_DEPTH, colorStops);
     this.pixels.map((row) =>
       row.map((pixel) => {
         pixel.colors = colorsGradient;
@@ -33,10 +31,7 @@ export class EditMatrix {
   }
 
   createMatrix(bounds: any) {
-    const colors = createGradientArray(
-      FLAME_DEPTH,
-      createFlameGraph(this.colors)
-    );
+    const colors = createGradientArray(FLAME_DEPTH, this.colorStops);
 
     this.rows = Math.ceil(bounds.h / CELL_HEIGHT);
     this.columns = Math.ceil(bounds.w / CELL_WIDTH);
@@ -103,7 +98,7 @@ export class EditMatrix {
     );
   }
 
-  draw = ({ ctx, pointer, tick, bounds }: any) => {
+  draw = ({ ctx, pointer }: any) => {
     const { x, y } = pointer.position;
 
     // pointer
