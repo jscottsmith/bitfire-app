@@ -2,14 +2,16 @@ import React, { useRef, useEffect, useState } from "react";
 import { Canvas } from "@gush/candybar";
 import { EditMatrix } from "./modules/edit-matrix";
 import { useColorsContext } from "../../context/colors";
+import { MutableRefObject } from "react";
 
-export const BitfireCanvas = () => {
-  const colorsContext = useColorsContext();
-  const [run, setRun] = useState(false);
-  const [canvas, setCanvas] = useState<Canvas | boolean>(false);
-  const [matrix, setMatrix] = useState<EditMatrix | boolean>(false);
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+function useCanvas({
+  canvasRef,
+  containerRef,
+}: {
+  canvasRef: MutableRefObject<HTMLCanvasElement | null>;
+  containerRef: MutableRefObject<HTMLDivElement | null>;
+}) {
+  const [canvas, setCanvas] = useState<Canvas | null>(null);
 
   useEffect(() => {
     setCanvas(
@@ -28,25 +30,48 @@ export const BitfireCanvas = () => {
     };
   }, []);
 
-  useEffect(() => {
-    const options = { colors: colorsContext.state.colors, isRunning: run };
-    const entity = new EditMatrix(options);
-    setMatrix(entity);
+  return canvas;
+}
 
-    if (canvas instanceof Canvas) {
-      canvas.addEntity(entity);
+function useMatrix(args: { canvas: Canvas | null; isRunning: boolean }) {
+  const colorsContext = useColorsContext();
+
+  const [matrix, setMatrix] = useState<EditMatrix | null>(null);
+
+  useEffect(() => {
+    const options = {
+      colors: colorsContext.state.colors,
+      isRunning: args.isRunning,
+    };
+
+    // Creat only once. Update if you need changes
+    if (matrix === null && args.canvas instanceof Canvas) {
+      const entity = new EditMatrix(options);
+      setMatrix(entity);
+      args.canvas.addEntity(entity);
     }
-  }, [canvas]);
+  }, [matrix, args.canvas, args.isRunning, colorsContext.state.colors]);
+
+  return matrix;
+}
+export const BitfireCanvas = () => {
+  const [isRunning, setRun] = useState(false);
+
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  const canvas = useCanvas({ containerRef, canvasRef });
+  const matrix = useMatrix({ canvas, isRunning });
 
   useEffect(() => {
     if (matrix instanceof EditMatrix) {
-      if (run) {
+      if (isRunning) {
         matrix.setRunMode();
       } else {
         matrix.setEditMode();
       }
     }
-  }, [run, canvas, matrix]);
+  }, [isRunning, canvas, matrix]);
 
   return (
     <>
@@ -57,9 +82,9 @@ export const BitfireCanvas = () => {
         Mode:{" "}
         <button
           className="bg-black text-white p-2"
-          onClick={() => setRun(!run)}
+          onClick={() => setRun(!isRunning)}
         >
-          {run ? "running" : "editing"}
+          {isRunning ? "running" : "editing"}
         </button>
       </div>
     </>
