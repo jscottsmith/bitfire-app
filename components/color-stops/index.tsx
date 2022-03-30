@@ -1,7 +1,11 @@
 import React, { useState, useRef } from "react";
 import { updateColors, useColorsContext } from "../../context/colors";
 import { ColorStop } from "../../type";
-import { GradientOption, GradientPicker } from "../gradient-picker";
+import {
+  GradientOption,
+  GradientOptions,
+  GradientPicker,
+} from "../gradient-picker";
 
 function createStop(stops: ColorStop[]): ColorStop {
   return { stop: 0, id: `${stops.length}`, hex: "#000000" };
@@ -19,7 +23,7 @@ export const ColorStops = () => {
     );
   }
 
-  function handleChange(options) {
+  function handleChange(options: GradientOptions) {
     const newColorStops = options.map((option: GradientOption) => ({
       hex: option.label,
       id: option.id,

@@ -12,3 +12,8 @@ declare module "@gush/candybar" {
     declare function getRandomInt(number, number): number;
   }
 }
+
+declare module "*.module.css" {
+  const content: { [key: string]: any };
+  export = content;
+}

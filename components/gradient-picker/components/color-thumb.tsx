@@ -29,7 +29,7 @@ export const ColorThumb = (props: ColorThumbProps) => {
         // if (!isFocused) {
         //   event.target.focus();
         // }
-        setValue(event.target.value);
+        setValue(parseFloat(event.target.value));
         props.onChange(event);
       }}
       className={cx(styles.thumb, isFocused && "z-10")}
