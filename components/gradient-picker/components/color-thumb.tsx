@@ -7,7 +7,7 @@ export type ColorThumbProps = {
   max: number;
   value: number;
   name: string;
-  removeColorStop: (id) => unknown;
+  removeColorStop: (id: string) => unknown;
   onChange: (event: ChangeEvent<HTMLInputElement>) => unknown;
 };
 
@@ -16,7 +16,7 @@ export const ColorThumb = (props: ColorThumbProps) => {
   const [isFocused, setFocus] = useState(false);
   const [isMouseDown, setMouseDown] = useState(false);
   const [deltaY, setDeltaY] = useState(0);
-  const [shouldDeleteStop, setShouldDeleteStop] = useState(0);
+  const [shouldDeleteStop, setShouldDeleteStop] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   return (
     <div

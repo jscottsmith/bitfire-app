@@ -60,9 +60,9 @@ export const GradientPicker: FC<GradientPickerProps> = (props) => {
     props.onChange && props.onChange(newOptions);
   }
 
-  function handleRemoveColorStop(id) {
+  function handleRemoveColorStop(id: string) {
     const newOptions = options.filter(
-      (option): GradientOption => option.id !== id
+      (option: GradientOption) => option.id !== id
     );
     setOptions(newOptions);
     props.onChange && props.onChange(newOptions);
