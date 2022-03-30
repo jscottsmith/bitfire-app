@@ -44,12 +44,6 @@ export const ColorThumb = (props: ColorThumbProps) => {
         }
         setDeltaY(0);
       }}
-      // onMouseUp={() => {
-      //   if (isMouseOut) {
-      //     console.log("remove", isMouseOut);
-      //     // props.removeColorStop(props.name);
-      //   }
-      // }}
     >
       <input
         type="range"
@@ -62,9 +56,6 @@ export const ColorThumb = (props: ColorThumbProps) => {
         value={value}
         ref={inputRef}
         onChange={(event: ChangeEvent<HTMLInputElement>) => {
-          // if (!isFocused) {
-          //   event.target.focus();
-          // }
           setValue(parseFloat(event.target.value));
           props.onChange(event);
         }}
