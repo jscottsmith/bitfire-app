@@ -60,6 +60,14 @@ export const GradientPicker: FC<GradientPickerProps> = (props) => {
     props.onChange && props.onChange(newOptions);
   }
 
+  function handleRemoveColorStop(id) {
+    const newOptions = options.filter(
+      (option): GradientOption => option.id !== id
+    );
+    setOptions(newOptions);
+    props.onChange && props.onChange(newOptions);
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.slider}>
@@ -74,6 +82,7 @@ export const GradientPicker: FC<GradientPickerProps> = (props) => {
             value={option.value}
             name={option.id}
             onChange={updateOption}
+            removeColorStop={handleRemoveColorStop}
           />
         ))}
       </div>

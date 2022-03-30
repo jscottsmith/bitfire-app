@@ -12,6 +12,7 @@
   width: 100%;
   outline: none;
   z-index: 10;
+  transform-origin: 50% 50%;
 }
 
 /* .thumb--zindex-3 {
@@ -25,6 +26,23 @@
 .thumb--zindex-5 {
   z-index: 5;
 } */
+
+.thumb:hover::-webkit-slider-thumb {
+  transform: scale(1.1);
+}
+.thumb:hover::-moz-range-thumb {
+  transform: scale(1.1);
+}
+
+/* deleting */
+.thumb.shouldDelete::-webkit-slider-thumb {
+  opacity: 0.25;
+  transform: scale(0.8);
+}
+.thumb.shouldDelete::-moz-range-thumb {
+  opacity: 0.25;
+  transform: scale(0.8);
+}
 
 .thumb:focus::-webkit-slider-thumb {
   outline: 4px solid white;

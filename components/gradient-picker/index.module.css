@@ -7,8 +7,8 @@
 .slider {
   position: absolute;
   top: 50%;
-  left: 2px;
-  right: 2px;
+  left: 16px;
+  right: 16px;
 }
 
 .track {

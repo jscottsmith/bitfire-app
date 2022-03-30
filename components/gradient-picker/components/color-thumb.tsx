@@ -7,32 +7,72 @@ export type ColorThumbProps = {
   max: number;
   value: number;
   name: string;
+  removeColorStop: (id) => unknown;
   onChange: (event: ChangeEvent<HTMLInputElement>) => unknown;
 };
 
 export const ColorThumb = (props: ColorThumbProps) => {
   const [value, setValue] = useState(props.value);
   const [isFocused, setFocus] = useState(false);
+  const [isMouseDown, setMouseDown] = useState(false);
+  const [deltaY, setDeltaY] = useState(0);
+  const [shouldDeleteStop, setShouldDeleteStop] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   return (
-    <input
-      type="range"
-      onFocus={() => setFocus(true)}
-      onBlur={() => setFocus(false)}
-      step="0.01"
-      name={props.name}
-      min={props.min}
-      max={props.max}
-      value={value}
-      ref={inputRef}
-      onChange={(event: ChangeEvent<HTMLInputElement>) => {
-        // if (!isFocused) {
-        //   event.target.focus();
-        // }
-        setValue(parseFloat(event.target.value));
-        props.onChange(event);
+    <div
+      onMouseMove={(e) => {
+        if (isMouseDown) {
+          const nextDelta = deltaY + e.movementY;
+          setDeltaY(nextDelta);
+          if (Math.abs(nextDelta) > 50) {
+            if (!shouldDeleteStop) {
+              setShouldDeleteStop(true);
+            }
+          } else if (shouldDeleteStop) {
+            setShouldDeleteStop(false);
+          }
+        }
       }}
-      className={cx(styles.thumb, isFocused && "z-10")}
-    />
+      onMouseDown={(e) => {
+        setMouseDown(true);
+      }}
+      onMouseUp={(e) => {
+        setMouseDown(false);
+        if (shouldDeleteStop) {
+          // console.log("remove");
+          props.removeColorStop(props.name);
+        }
+        setDeltaY(0);
+      }}
+      // onMouseUp={() => {
+      //   if (isMouseOut) {
+      //     console.log("remove", isMouseOut);
+      //     // props.removeColorStop(props.name);
+      //   }
+      // }}
+    >
+      <input
+        type="range"
+        onFocus={() => setFocus(true)}
+        onBlur={() => setFocus(false)}
+        step="0.01"
+        name={props.name}
+        min={props.min}
+        max={props.max}
+        value={value}
+        ref={inputRef}
+        onChange={(event: ChangeEvent<HTMLInputElement>) => {
+          // if (!isFocused) {
+          //   event.target.focus();
+          // }
+          setValue(parseFloat(event.target.value));
+          props.onChange(event);
+        }}
+        className={cx(styles.thumb, {
+          "z-10": isFocused,
+          [styles.shouldDelete]: shouldDeleteStop,
+        })}
+      />
+    </div>
   );
 };
