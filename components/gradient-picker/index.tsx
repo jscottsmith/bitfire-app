@@ -41,10 +41,6 @@ export const GradientPicker: FC<GradientPickerProps> = (props) => {
     setOptions(props.options);
   }, [props.options]);
 
-  useEffect(() => {
-    props.onChange && props.onChange(options);
-  }, [options]);
-
   function updateOption(e: ChangeEvent<HTMLInputElement>) {
     // This should be optimized
     const newOptions = options.map((option): GradientOption => {
@@ -61,33 +57,32 @@ export const GradientPicker: FC<GradientPickerProps> = (props) => {
 
     setOptions(newOptions);
 
-    // props.onChange(options);
+    props.onChange && props.onChange(newOptions);
   }
 
   return (
     <div className={styles.container}>
-      {/* NOTE: must insure the order of options 
+      <div className={styles.slider}>
+        {/* NOTE: must insure the order of options 
        remain the same even when they are sorted 
        or else focus will be lost mid change */}
-      {props.options.map((option, i) => (
-        <ColorThumb
-          key={i}
-          min={props.min}
-          max={props.max}
-          value={option.value}
-          name={option.id}
-          onChange={updateOption}
-        />
-      ))}
-
-      <div className={styles.slider}>
-        <div
-          className={styles.track}
-          style={{
-            backgroundImage: createCSSGradient(options),
-          }}
-        />
+        {options.map((option, i) => (
+          <ColorThumb
+            key={option.id}
+            min={props.min}
+            max={props.max}
+            value={option.value}
+            name={option.id}
+            onChange={updateOption}
+          />
+        ))}
       </div>
+      <div
+        className={styles.track}
+        style={{
+          backgroundImage: createCSSGradient(options),
+        }}
+      />
     </div>
   );
 };

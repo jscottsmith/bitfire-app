@@ -18,6 +18,7 @@ function useCanvas({
     setCanvas(
       new Canvas({
         canvas: canvasRef?.current,
+        dpr: 1,
         container: containerRef?.current,
         hasPointer: true,
         pauseInBackground: true,

@@ -12,10 +12,13 @@ export type ColorThumbProps = {
 
 export const ColorThumb = (props: ColorThumbProps) => {
   const [value, setValue] = useState(props.value);
+  const [isFocused, setFocus] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   return (
     <input
       type="range"
+      onFocus={() => setFocus(true)}
+      onBlur={() => setFocus(false)}
       step="0.01"
       name={props.name}
       min={props.min}
@@ -23,10 +26,13 @@ export const ColorThumb = (props: ColorThumbProps) => {
       value={value}
       ref={inputRef}
       onChange={(event: ChangeEvent<HTMLInputElement>) => {
+        // if (!isFocused) {
+        //   event.target.focus();
+        // }
         setValue(event.target.value);
         props.onChange(event);
       }}
-      className={cx(styles.thumb)}
+      className={cx(styles.thumb, isFocused && "z-10")}
     />
   );
 };

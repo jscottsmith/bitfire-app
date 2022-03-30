@@ -17,7 +17,7 @@ export const ColorOptions = () => {
       <ul className="flex">
         <button onClick={() => context.dispatch(resetColors())}>Reset</button>
         {context.state.colorStops.map((colorStop, i) => (
-          <li key={i}>
+          <li key={colorStop.id}>
             <button
               onClick={() => {
                 setColorIndex(i);

@@ -9,12 +9,14 @@ function createStop(stops: ColorStop[]): ColorStop {
 
 export const ColorStops = () => {
   const colorContext = useColorsContext();
-  const [colorStops, setStops] = useState<ColorStop[]>(
-    colorContext.state.colorStops
-  );
 
   function addStop() {
-    setStops([...colorStops, createStop(colorStops)]);
+    colorContext.dispatch(
+      updateColors([
+        ...colorContext.state.colorStops,
+        createStop(colorContext.state.colorStops),
+      ])
+    );
   }
 
   function handleChange(options) {
@@ -26,23 +28,12 @@ export const ColorStops = () => {
     colorContext.dispatch(updateColors(newColorStops));
   }
 
-  // function setStopValue(id: string, stop: number) {
-  //   setStops(
-  //     colorStops.map((colorStop) => {
-  //       if (colorStop.id === id) {
-  //         return { ...colorStop, stop };
-  //       }
-  //       return colorStop;
-  //     })
-  //   );
-  // }
-
   return (
     <>
       <GradientPicker
         min={0}
         max={1}
-        // onChange={handleChange}
+        onChange={handleChange}
         options={colorContext.state.colorStops.map((colorStop) => ({
           label: colorStop.hex,
           id: colorStop.id,

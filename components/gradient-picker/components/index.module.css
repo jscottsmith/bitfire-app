@@ -26,34 +26,41 @@
   z-index: 5;
 } */
 
+.thumb:focus::-webkit-slider-thumb {
+  outline: 4px solid white;
+  /* background-color: black; */
+}
+.thumb:focus::-moz-range-thumb {
+  outline: 4px solid white;
+  /* background-color: black; */
+}
+
 /* For Chrome browsers */
 .thumb::-webkit-slider-thumb {
-  background-color: #f1f5f7;
+  background-color: rgba(0, 0, 0, 0);
   border: none;
   border-radius: 50%;
-  box-shadow: 0 0 1px 1px #ced4da;
+  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
+  outline: 3px solid white;
   cursor: pointer;
   height: 18px;
   width: 18px;
-  margin-top: 4px;
+  margin: 0;
   pointer-events: all;
   position: relative;
 }
 
-.thumb::-webkit-slider-thumb:focus {
-  outline: 2px solid blue;
-}
-
 /* For Firefox browsers */
 .thumb::-moz-range-thumb {
-  background-color: #f1f5f7;
+  background-color: rgba(0, 0, 0, 0);
   border: none;
   border-radius: 50%;
-  box-shadow: 0 0 1px 1px #ced4da;
+  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
+  outline: 3px solid white;
   cursor: pointer;
   height: 18px;
   width: 18px;
-  margin-top: 4px;
+  margin: 0;
   pointer-events: all;
   position: relative;
 }
