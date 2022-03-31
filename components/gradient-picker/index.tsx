@@ -38,7 +38,9 @@ function sortById(a: GradientOption, b: GradientOption) {
   return 0;
 }
 
-function createCSSGradient(options: GradientOptions): CSSProperties {
+function createCSSGradient(
+  options: GradientOptions
+): CSSProperties | undefined {
   if (options.length === 0) {
     return;
   }

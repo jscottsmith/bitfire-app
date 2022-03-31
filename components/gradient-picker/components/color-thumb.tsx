@@ -1,4 +1,4 @@
-import React, { useRef, useState, ChangeEvent } from "react";
+import React, { useRef, useState, ChangeEvent, MouseEvent } from "react";
 import cx from "classnames";
 import * as styles from "./index.module.css";
 
@@ -20,7 +20,7 @@ export const ColorThumb = (props: ColorThumbProps) => {
   const [shouldDeleteStop, setShouldDeleteStop] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  function onMouseMove(e: MouseEvent) {
+  function onMouseMove(e: MouseEvent<HTMLInputElement>) {
     if (isMouseDown) {
       const nextDelta = deltaY + e.movementY;
       setDeltaY(nextDelta);
@@ -34,7 +34,7 @@ export const ColorThumb = (props: ColorThumbProps) => {
     }
   }
 
-  function onMouseUp(e) {
+  function onMouseUp() {
     setMouseDown(false);
     if (shouldDeleteStop) {
       props.removeColorStop(props.name);
