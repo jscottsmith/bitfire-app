@@ -5,6 +5,7 @@ import {
   useEffect,
   useState,
   useRef,
+  CSSProperties,
 } from "react";
 import classnames from "classnames";
 import * as styles from "./index.module.css";
@@ -25,20 +26,46 @@ interface GradientPickerProps {
   onChange: Function;
 }
 
-function createCSSGradient(options: GradientOptions): string {
+function sortById(a: GradientOption, b: GradientOption) {
+  const idA = a.id.toUpperCase();
+  const idB = b.id.toUpperCase();
+  if (idA < idB) {
+    return -1;
+  }
+  if (idA > idB) {
+    return 1;
+  }
+  return 0;
+}
+
+function createCSSGradient(options: GradientOptions): CSSProperties {
+  if (options.length === 0) {
+    return;
+  }
+  if (options.length === 1) {
+    return { backgroundColor: options[0].label };
+  }
+
   const format = options.map((option) => {
     return `${option.label} ${option.value * 100}%`;
   });
 
-  return `linear-gradient(to right,${format.join(",")})`;
+  return { backgroundImage: `linear-gradient(to right,${format.join(",")})` };
+}
+
+function createInternalOptions(options: GradientOptions) {
+  const internalOptions = [...options].sort(sortById);
+  return internalOptions;
 }
 
 export const GradientPicker: FC<GradientPickerProps> = (props) => {
-  const [options, setOptions] = useState<GradientOptions>(props.options);
+  const [options, setOptions] = useState<GradientOptions>(
+    createInternalOptions(props.options)
+  );
 
   // handle external updates
   useEffect(() => {
-    setOptions(props.options);
+    setOptions(createInternalOptions(props.options));
   }, [props.options]);
 
   function updateOption(e: ChangeEvent<HTMLInputElement>) {
@@ -53,10 +80,11 @@ export const GradientPicker: FC<GradientPickerProps> = (props) => {
       return option;
     });
 
+    // internal options sorted by ID so that the DOM remains stable in order
+    setOptions(createInternalOptions(newOptions));
+
+    // external options sorted by value
     newOptions.sort((a, b) => a.value - b.value);
-
-    setOptions(newOptions);
-
     props.onChange && props.onChange(newOptions);
   }
 
@@ -83,15 +111,11 @@ export const GradientPicker: FC<GradientPickerProps> = (props) => {
             name={option.id}
             onChange={updateOption}
             removeColorStop={handleRemoveColorStop}
+            canOptionBeRemoved={options.length > 2}
           />
         ))}
       </div>
-      <div
-        className={styles.track}
-        style={{
-          backgroundImage: createCSSGradient(options),
-        }}
-      />
+      <div className={styles.track} style={createCSSGradient(props.options)} />
     </div>
   );
 };

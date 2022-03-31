@@ -7,6 +7,7 @@ export type ColorThumbProps = {
   max: number;
   value: number;
   name: string;
+  canOptionBeRemoved: boolean;
   removeColorStop: (id: string) => unknown;
   onChange: (event: ChangeEvent<HTMLInputElement>) => unknown;
 };
@@ -23,7 +24,7 @@ export const ColorThumb = (props: ColorThumbProps) => {
     if (isMouseDown) {
       const nextDelta = deltaY + e.movementY;
       setDeltaY(nextDelta);
-      if (Math.abs(nextDelta) > 50) {
+      if (Math.abs(nextDelta) > 50 && props.canOptionBeRemoved) {
         if (!shouldDeleteStop) {
           setShouldDeleteStop(true);
         }

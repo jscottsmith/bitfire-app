@@ -27,4 +27,4 @@ export const SPREAD_FROM: SpreadFromSide[] = [
   "right",
   "top",
 ];
-export const FLAME_DEPTH = 24;
+export const FLAME_DEPTH = 64;
