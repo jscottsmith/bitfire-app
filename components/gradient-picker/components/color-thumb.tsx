@@ -49,6 +49,7 @@ export const ColorThumb = (props: ColorThumbProps) => {
   }
 
   return (
+    // @ts-expect-error
     <div style={{ "--color": props.color }}>
       <input
         type="range"
