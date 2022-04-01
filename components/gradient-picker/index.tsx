@@ -111,13 +111,27 @@ export const GradientPicker: FC<GradientPickerProps> = (props) => {
             max={props.max}
             value={option.value}
             name={option.id}
+            color={option.label}
             onChange={updateOption}
             removeColorStop={handleRemoveColorStop}
             canOptionBeRemoved={options.length > 2}
           />
         ))}
       </div>
-      <div className={styles.track} style={createCSSGradient(props.options)} />
+      <div className={styles.track}>
+        <div
+          className={styles.startCap}
+          style={{ background: props.options[0].label }}
+        />
+        <div
+          className={styles.gradient}
+          style={createCSSGradient(props.options)}
+        />
+        <div
+          className={styles.endCap}
+          style={{ background: props.options[props.options.length - 1].label }}
+        />
+      </div>
     </div>
   );
 };

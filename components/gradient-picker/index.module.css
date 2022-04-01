@@ -12,8 +12,24 @@
 }
 
 .track {
+  display: flex;
+  flex-flow: row nowrap;
   width: 100%;
   border-radius: 999px;
   height: 48px;
   background-color: #eee;
+}
+.startCap {
+  width: 25px;
+  border-top-left-radius: 100px;
+  border-bottom-left-radius: 100px;
+}
+.endCap {
+  width: 25px;
+  border-top-right-radius: 100px;
+  border-bottom-right-radius: 100px;
+}
+.gradient {
+  display: flex;
+  width: 100%;
 }

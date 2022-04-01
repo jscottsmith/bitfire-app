@@ -7,6 +7,7 @@ export type ColorThumbProps = {
   max: number;
   value: number;
   name: string;
+  color: string;
   canOptionBeRemoved: boolean;
   removeColorStop: (id: string) => unknown;
   onChange: (event: ChangeEvent<HTMLInputElement>) => unknown;
@@ -48,24 +49,26 @@ export const ColorThumb = (props: ColorThumbProps) => {
   }
 
   return (
-    <input
-      type="range"
-      step="0.01"
-      name={props.name}
-      min={props.min}
-      max={props.max}
-      value={value}
-      ref={inputRef}
-      className={cx(styles.thumb, {
-        "z-10": isFocused,
-        [styles.shouldDelete]: shouldDeleteStop,
-      })}
-      onFocus={() => setFocus(true)}
-      onBlur={() => setFocus(false)}
-      onMouseMove={onMouseMove}
-      onMouseDown={() => setMouseDown(true)}
-      onMouseUp={onMouseUp}
-      onChange={onChange}
-    />
+    <div style={{ "--color": props.color }}>
+      <input
+        type="range"
+        step="0.01"
+        name={props.name}
+        min={props.min}
+        max={props.max}
+        value={value}
+        ref={inputRef}
+        className={cx(styles.thumb, {
+          "z-10": isFocused,
+          [styles.shouldDelete]: shouldDeleteStop,
+        })}
+        onFocus={() => setFocus(true)}
+        onBlur={() => setFocus(false)}
+        onMouseMove={onMouseMove}
+        onMouseDown={() => setMouseDown(true)}
+        onMouseUp={onMouseUp}
+        onChange={onChange}
+      />
+    </div>
   );
 };
